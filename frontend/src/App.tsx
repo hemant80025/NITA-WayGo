@@ -57,7 +57,9 @@ export default function App() {
           showAlternatives: false,
           addWaypoints: false,
           lineOptions: {
-            styles: [{ color: '#1a73e8', opacity: 0.7, weight: 5 }]
+            styles: [{ color: '#1a73e8', opacity: 0.7, weight: 5 }],
+            extendToWaypoints: true,
+            missingRouteTolerance: 0
           }
         }).addTo(map);
 
