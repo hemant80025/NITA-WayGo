@@ -1,3 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base{
+    html{
+        font-family: "Poppins", "sans-serif";
+    }
+
+    body{
+        background-color: #fff;
+        overflow-x: hidden;
+    }
+}
+
+@layer components{
+    .input-box{
+        @apply w-full flex justify-between gap-3 text-sm text-black bg-slate-100 rounded px-1 md:px-4 py-1 md:py-2 mb-2 border border-slate-200 outline-none
+    }
+
+    .btn-primary{
+        @apply w-full text-sm font-medium text-white bg-green-600 p-[5px] md:p-[10px] rounded-md my-1 hover:bg-transparent hover:border-2 hover:rounded-none border-green-600 hover:text-green-600 transition-all duration-100 ease-in-out hover:[transform:scale(1.02)]
+    }
+
+    .btn-secondary{
+        @apply w-full text-sm font-medium text-white bg-secondaryLight1 p-[5px] md:p-[10px] rounded-md my-1 hover:bg-transparent hover:border-2 hover:rounded-none border-secondaryLight1 hover:text-secondaryLight1 transition-all duration-100 ease-in-out hover:[transform:scale(1.02)]
+    }
+
+    .option-chip{
+        @apply text-sm font-medium text-red-700 bg-red-100 px-4 py-1 rounded-lg border border-red-50 cursor-pointer hover:border-primaryLight2
+    }
+
+    .btn-small{
+        @apply flex items-center gap-1 text-xs font-medium bg-primaryLight2 text-white hover:bg-red-200/60 hover:text-primaryLight2 rounded px-3 py-[4px]
+    }
+}
+
+input[type="password"]::-ms-reveal, input[type="password"]::-ms-clear, input[type="password"]::-webkit-credentials-auto-fill-button {
+    display: none;
+}
+
+
+/* popups styling starts */
+.leaflet-popup-content{
+    width: 160px !important;
+    color: black;
+    padding: 0;
+}
+
+.leaflet-popup-content .leaflet-popup-para2{
+    color: gray;
+    font-size: smaller;
+}
+
+.leaflet-popup-content .leaflet-popup-para1{
+    font-weight: bold;
+    font-size: smaller;
+}
+/* popups styling ends */
