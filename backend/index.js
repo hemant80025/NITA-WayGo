@@ -1,34 +1,28 @@
-import express from "express";
-import dotenv from "dotenv";
-import cors from "cors";
-import connectDB from "./config/db.js";  // Import MongoDB connection
-import userRoutes from "./routes/userRoutes.js";  // Import user routes
-
-dotenv.config();  // Load environment variables
-
+const connectToMongo = require("./db");
+require("dotenv").config();
+const cors = require("cors");
+const express = require("express");
 const app = express();
+const startServer = async () => {
+  try {
+    const port = process.env.PORT || 3000;
+    await connectToMongo();
+    app.use(cors());
+    app.use("/api/authUser", require("./routes/authUser"));
+    app.use("/api/authAdmin", require("./routes/authAdmin"));
+    app.use("/api/admin",require("./routes/admin"));
+    app.use("/api/user",require("./routes/user"));
+    app.get(/(.*)/, (req, res) => {
+      res.status(404).json({ error: "NOT FOUND!" });
+    });
 
-// Middleware
-app.use(cors());  // Enable CORS for frontend communication
-app.use(express.json()); // Parse JSON requests
+    app.listen(port, ()=>{
+      console.log(`Server running on http://localhost:${port}`)
+    })
 
-// Connect to MongoDB
-connectDB().then(() => {
-    //console.log(" Connected to MongoDB via Compass (localhost:27017)");
-}).catch((err) => {
-    console.error(" MongoDB Connection Error:", err);
-});
+  } catch(error){
+    console.log(error);
+  }
+};
 
-// Use routes
-app.use("/api", userRoutes);
-
-// Home route
-app.get("/", (req, res) => {
-    res.send(" API is running...");
-});
-
-// Server listen
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-    console.log(` Server running on http://localhost:${PORT}`);
-});
+startServer();
