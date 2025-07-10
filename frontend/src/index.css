@@ -1,61 +1,85 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+/* Taken from getting started guide at: https://leafletjs.com/examples/quick-start/ */
+@import "https://unpkg.com/leaflet@1.7.1/dist/leaflet.css";
+@import "https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
-@layer base{
-    html{
-        font-family: "Poppins", "sans-serif";
-    }
 
-    body{
-        background-color: #fff;
-        overflow-x: hidden;
-    }
+/* These CSS variables are global, so they are available in all CSS modules */
+:root {
+  --color-brand--1: #ffb545;
+  --color-brand--2: #00c46a;
+  --color-dark--0: #242a2e;
+  --color-dark--1: #2d3439;
+  --color-dark--2: #42484d;
+  --color-light--1: #aaa;
+  --color-light--2: #ececec;
+  --color-light--3: #d6dee0;
 }
 
-@layer components{
-    .input-box{
-        @apply w-full flex justify-between gap-3 text-sm text-black bg-slate-100 rounded px-1 md:px-4 py-1 md:py-2 mb-2 border border-slate-200 outline-none
-    }
-
-    .btn-primary{
-        @apply w-full text-sm font-medium text-white bg-green-600 p-[5px] md:p-[10px] rounded-md my-1 hover:bg-transparent hover:border-2 hover:rounded-none border-green-600 hover:text-green-600 transition-all duration-100 ease-in-out hover:[transform:scale(1.02)]
-    }
-
-    .btn-secondary{
-        @apply w-full text-sm font-medium text-white bg-secondaryLight1 p-[5px] md:p-[10px] rounded-md my-1 hover:bg-transparent hover:border-2 hover:rounded-none border-secondaryLight1 hover:text-secondaryLight1 transition-all duration-100 ease-in-out hover:[transform:scale(1.02)]
-    }
-
-    .option-chip{
-        @apply text-sm font-medium text-red-700 bg-red-100 px-4 py-1 rounded-lg border border-red-50 cursor-pointer hover:border-primaryLight2
-    }
-
-    .btn-small{
-        @apply flex items-center gap-1 text-xs font-medium bg-primaryLight2 text-white hover:bg-red-200/60 hover:text-primaryLight2 rounded px-3 py-[4px]
-    }
+*,
+*::after,
+*::before
+{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+*::-webkit-scrollbar {
+  display: none;
 }
 
-input[type="password"]::-ms-reveal, input[type="password"]::-ms-clear, input[type="password"]::-webkit-credentials-auto-fill-button {
-    display: none;
+html {
+  font-size: 62.5%;
+  box-sizing: border-box;
 }
 
-
-/* popups styling starts */
-.leaflet-popup-content{
-    width: 160px !important;
-    color: black;
-    padding: 0;
+body {
+  font-family: "Manrope", sans-serif;
+  color: var(--color-light--2);
+  font-weight: 400;
+  line-height: 1.6;
 }
 
-.leaflet-popup-content .leaflet-popup-para2{
-    color: gray;
-    font-size: smaller;
+label {
+  font-size: 1.6rem;
+  font-weight: 600;
 }
 
-.leaflet-popup-content .leaflet-popup-para1{
-    font-weight: bold;
-    font-size: smaller;
+input,
+textarea {
+  width: 100%;
+  padding: 0.8rem 1.2rem;
+  font-family: inherit;
+  font-size: 1.6rem;
+  border: none;
+  border-radius: 5px;
+  background-color: var(--color-light--3);
+  transition: all 0.2s;
 }
-/* popups styling ends */
+
+input:focus {
+  outline: none;
+  background-color: #fff;
+}
+
+.cta:link,
+.cta:visited {
+  display: inline-block;
+  background-color: var(--color-brand--2);
+  color: var(--color-dark--1);
+  text-transform: uppercase;
+  text-decoration: none;
+  font-size: 1.6rem;
+  font-weight: 600;
+  padding: 1rem 3rem;
+  border-radius: 5px;
+}
+
+/*
+"importCSSModule": {
+    "prefix": "csm",
+    "scope": "javascript,typescript,javascriptreact",
+    "body": ["import styles from './${TM_FILENAME_BASE}.module.css'"],
+    "description": "Import CSS Module as `styles`"
+  },
+*/
