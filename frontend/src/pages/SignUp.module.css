@@ -1,0 +1,70 @@
+
+/* .login {
+    margin: 2.5rem;
+    padding: 2.5rem 5rem;
+    background-color: var(--color-dark--1);
+    min-height: calc(100vh - 5rem);
+}
+
+.form {
+    background-color: var(--color-dark--2);
+    border-radius: 7px;
+    padding: 2rem 3rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+
+    
+    width: 48rem;
+    margin: 8rem auto;
+}
+
+.row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+} */
+
+/* Common styles for both desktop and mobile */
+
+/* added new code */
+.login {
+    margin: 2.5rem;
+    padding: 2.5rem 5rem;
+    background-color: var(--color-dark--1);
+    min-height: calc(100vh - 5rem);
+}
+
+.form {
+    background-color: var(--color-dark--2);
+    border-radius: 7px;
+    padding: 2rem 3rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    max-width: 48rem; /* Set a maximum width for the form */
+    margin: 8rem auto;
+}
+
+.row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+/* Responsive styles for screens with a maximum width of 768px (adjust as needed) */
+@media screen and (max-width: 768px) {
+    .login {
+        padding: 2.5rem;
+    }
+
+    .form {
+        width: calc(100% - 2rem);
+        padding: 1.5rem;
+        margin: 4rem auto;
+    }
+
+    /* Adjust other styles as needed for smaller screens */
+}
