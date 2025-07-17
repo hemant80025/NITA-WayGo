@@ -1,0 +1,53 @@
+.place {
+    padding: 2rem 3rem;
+    max-height: 70%;
+    background-color: var(--color-dark--2);
+    border-radius: 7px;
+    overflow: scroll;
+  
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .place h6 {
+    text-transform: uppercase;
+    font-size: 1.1rem;
+    font-weight: 900;
+    color: var(--color-light--1);
+  }
+  
+  .place h3 {
+    font-size: 1.9rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .place h3 span {
+    font-size: 3.2rem;
+    line-height: 1;
+  }
+  
+  .place p {
+    font-size: 1.6rem;
+  }
+  
+  .place a:link,
+  .place a:visited {
+    font-size: 1.6rem;
+    color: var(--color-brand--1);
+  }
+  
