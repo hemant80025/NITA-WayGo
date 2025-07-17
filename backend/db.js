@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 require("dotenv").config();
 
-const url = process.env.VITE_MONGOURL;
+const url = process.env.MONGOURL;
 const connectToMongo = async () => {
   try {
     await mongoose.connect(url);

@@ -1,7 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import "./App.css";
-import PageNotFound from "./pages/Pagenotfound";
+import PageNotFound from "./pages/PageNotFound";
 import AppLayout from "./pages/AppLayout";
 import ProtectedRoutes from "./components/ProtectedRoutes";
 import Login from "./pages/Login";
