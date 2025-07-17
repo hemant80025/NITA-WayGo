@@ -8,7 +8,11 @@ const startServer = async () => {
   try {
     const port = process.env.PORT || 5000;
     await connectToMongo();
-    app.use(cors());
+    
+    app.use(cors({
+      origin: ['http://localhost:3000', process.env.FRONTEND_URL],
+      credentials: true
+    }));
 
     app.use("/api/authUser", require("./routes/authUser"));
 

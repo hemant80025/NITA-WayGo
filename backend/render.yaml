@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: nita-waygo-backend
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
