@@ -1,6 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/Homepage";
-import "./app.css";
+import "./App.css";
 import PageNotFound from "./pages/PageNotFound";
 import AppLayout from "./pages/AppLayout";
 import ProtectedRoutes from "./components/ProtectedRoutes";
