@@ -16,7 +16,7 @@ const RoutingMachine = ({ userLocation, destination }) => {
       ],
       router: new L.Routing.OSRMv1({
         serviceUrl: 'https://router.project-osrm.org/route/v1',
-        profile: 'foot' // 🥾 use walking route for campus
+        profile: 'foot'
       }),
       lineOptions: {
         styles: [{ color: '#007bff', weight: 5, opacity: 0.8 }],
@@ -27,7 +27,7 @@ const RoutingMachine = ({ userLocation, destination }) => {
       fitSelectedRoutes: true,
       showAlternatives: false,
       show: false,
-      createMarker: () => null // hide default markers
+      createMarker: () => null
     });
 
     routingControl.addTo(map);
