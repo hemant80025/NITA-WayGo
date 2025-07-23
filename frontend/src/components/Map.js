@@ -22,6 +22,7 @@ import Button from "./Button";
 import { useUrlPosition } from "../hooks/useUrlPosition";
 import { usePlaces } from "../contexts/PlacesContext";
 import { useAuth } from "../contexts/AuthContext";
+import RoutingMachine from "../hooks/RoutingMachine";
 
 function Map() {
   const { places } = usePlaces();
@@ -32,7 +33,6 @@ function Map() {
   const [showPolyLine, setShowPolyLine] = useState(false);
   const [flag, setFlag] = useState(false);
   const [userLocation, setUserLocation] = useState(null);
-  const [route, setRoute] = useState(null);
   const [destination, setDestination] = useState(null);
   // ankit added
   const [copied, setCopied] = useState(false);
@@ -63,28 +63,6 @@ function Map() {
     return shareLink;
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (userLocation && destination) {
-        try {
-          const response = await axios.get(
-            `https://router.project-osrm.org/route/v1/driving/${userLocation[1]},${userLocation[0]};${destination[1]},${destination[0]}?steps=true&geometries=geojson`
-          );
-          console.log(response);
-          console.log(
-            "Route Coordinates:",
-            response.data.routes[0].geometry.coordinates
-          );
-          setRoute(response.data.routes[0].geometry.coordinates);
-        } catch (error) {
-          console.error("Error fetching route:", error);
-        }
-      }
-    };
-
-    fetchData();
-  }, [userLocation, destination]);
-
   useEffect(
     function () {
       if (mapLat || mapLng) setMapPosition([mapLat, mapLng]);
@@ -107,13 +85,11 @@ function Map() {
   }, [geolocationPosition]);
 
   function handleDestination(e) {
-    setShowPolyLine(false);
     setDestination([e.latlng.lat, e.latlng.lng]);
   }
 
   function handleCurrentLocation() {
     getPosition();
-    setShowPolyLine(true);
   }
 
   function getMarkerIcon(type) {
@@ -165,12 +141,10 @@ function Map() {
         >
           <Marker icon={presentLocationIcon} position={mapPostion}></Marker>
 
-          {route && showPolyLine && (
-            <Polyline
-              positions={route.map((coord) => [coord[1], coord[0]])}
-              color="blue"
-            />
+          {userLocation && destination && (
+            <RoutingMachine userLocation={userLocation} destination={destination} />
           )}
+
 
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
