@@ -100,6 +100,12 @@ function Map() {
     [geolocationPosition]
   );
 
+  useEffect(() => {
+    if (geolocationPosition) {
+      setUserLocation([geolocationPosition.lat, geolocationPosition.lng]);
+    }
+  }, [geolocationPosition]);
+
   function handleDestination(e) {
     setShowPolyLine(false);
     setDestination([e.latlng.lat, e.latlng.lng]);
@@ -108,7 +114,6 @@ function Map() {
   function handleCurrentLocation() {
     getPosition();
     setShowPolyLine(true);
-    setUserLocation([geolocationPosition.lat, geolocationPosition.lng]);
   }
 
   function getMarkerIcon(type) {
@@ -166,6 +171,7 @@ function Map() {
               color="blue"
             />
           )}
+
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
