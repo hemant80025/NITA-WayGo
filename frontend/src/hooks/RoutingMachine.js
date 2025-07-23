@@ -4,40 +4,40 @@ import L from 'leaflet';
 import 'leaflet-routing-machine';
 
 const RoutingMachine = ({ userLocation, destination }) => {
-  const map = useMap();
+    const map = useMap();
 
-  useEffect(() => {
-    if (!map || !userLocation || !destination) return;
+    useEffect(() => {
+        if (!map || !userLocation || !destination) return;
 
-    const routingControl = L.Routing.control({
-      waypoints: [
-        L.latLng(userLocation[0], userLocation[1]),
-        L.latLng(destination[0], destination[1])
-      ],
-      router: new L.Routing.OSRMv1({
-        serviceUrl: 'https://router.project-osrm.org/route/v1',
-        profile: 'foot'
-      }),
-      lineOptions: {
-        styles: [{ color: '#007bff', weight: 5, opacity: 0.8 }],
-        extendToWaypoints: true
-      },
-      addWaypoints: false,
-      draggableWaypoints: false,
-      fitSelectedRoutes: true,
-      showAlternatives: false,
-      show: false,
-      createMarker: () => null
-    });
+        const routingControl = L.Routing.control({
+            waypoints: [
+                L.latLng(userLocation[0], userLocation[1]),
+                L.latLng(destination[0], destination[1])
+            ],
+            router: new L.Routing.OSRMv1({
+                serviceUrl: 'https://router.project-osrm.org/route/v1',
+                profile: 'foot'
+            }),
+            lineOptions: {
+                styles: [{ color: '#007bff', weight: 5, opacity: 0.8 }],
+                extendToWaypoints: true
+            },
+            addWaypoints: false,
+            draggableWaypoints: false,
+            fitSelectedRoutes: true,
+            showAlternatives: false,
+            show: false,
+            createMarker: () => null
+        });
 
-    routingControl.addTo(map);
+        routingControl.addTo(map);
 
-    return () => {
-      map.removeControl(routingControl);
-    };
-  }, [map, userLocation, destination]);
+        return () => {
+            map.removeControl(routingControl);
+        };
+    }, [map, userLocation, destination]);
 
-  return null;
+    return null;
 };
 
 export default RoutingMachine;
