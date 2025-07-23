@@ -49,7 +49,7 @@ function Sidebar() {
         <Outlet />
         <footer className={`${styles.footer} text-center`}>
           <p className={styles.copyright}>
-            @ Copyright {new Date().getFullYear} by Maply Inc.
+            NITA-WayGo...
           </p>
         </footer>
       </div>

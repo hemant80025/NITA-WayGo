@@ -1,0 +1,16 @@
+.spinner {
+  width: 6rem;
+  height: 6rem;
+  border-radius: 50%;
+  background: conic-gradient(transparent 10%, #3498db); /* fallback blue */
+  
+  -webkit-mask-image: radial-gradient(circle at center, transparent calc(100% - 8px), black 100%);
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: cover;
+  
+  mask-image: radial-gradient(circle at center, transparent calc(100% - 8px), black 100%);
+  mask-repeat: no-repeat;
+  mask-size: cover;
+
+  animation: rotate 1.5s linear infinite;
+}

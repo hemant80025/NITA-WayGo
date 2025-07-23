@@ -4,7 +4,7 @@ import "leaflet/dist/leaflet.css";
 import axios from "axios";
 // ankit added
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { FiCopy } from "react-icons/fi"; 
+import { FiCopy } from "react-icons/fi";
 import {
   MapContainer,
   Marker,
@@ -15,6 +15,7 @@ import {
   Polyline,
   useMapEvent,
 } from "react-leaflet";
+
 import { useEffect, useState } from "react";
 import { useGeolocation } from "../hooks/useGeolocation";
 import Button from "./Button";
@@ -99,6 +100,12 @@ function Map() {
     [geolocationPosition]
   );
 
+  useEffect(() => {
+    if (geolocationPosition) {
+      setUserLocation([geolocationPosition.lat, geolocationPosition.lng]);
+    }
+  }, [geolocationPosition]);
+
   function handleDestination(e) {
     setShowPolyLine(false);
     setDestination([e.latlng.lat, e.latlng.lng]);
@@ -107,7 +114,6 @@ function Map() {
   function handleCurrentLocation() {
     getPosition();
     setShowPolyLine(true);
-    setUserLocation([geolocationPosition.lat, geolocationPosition.lng]);
   }
 
   function getMarkerIcon(type) {
@@ -131,25 +137,25 @@ function Map() {
 
   return (
     <>
-        {!sidebarOpen && (<div style={{display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
+      {!sidebarOpen && (<div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
 
-      
-          <CopyToClipboard text={generateShareLink()} onCopy={() => {
-            setCopied(!copied)
-            }}>
-                <Button type="position"  onClick={() => {
-              getPosition();
-              setFlag(true);
-            }}>
-                {copied ? "Link Copied!" : "Share Location"}
-                <FiCopy style={{ marginLeft: "5px" }} />
-                </Button>
-          </CopyToClipboard>
-    
-        </div>
-      
-          
-        )}
+
+        <CopyToClipboard text={generateShareLink()} onCopy={() => {
+          setCopied(!copied)
+        }}>
+          <Button type="position" onClick={() => {
+            getPosition();
+            setFlag(true);
+          }}>
+            {copied ? "Link Copied!" : "Share Location"}
+            <FiCopy style={{ marginLeft: "5px" }} />
+          </Button>
+        </CopyToClipboard>
+
+      </div>
+
+
+      )}
       <div className={`${styles.mapContainer}`}>
         <MapContainer
           center={mapPostion}
@@ -165,6 +171,7 @@ function Map() {
               color="blue"
             />
           )}
+
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

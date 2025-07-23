@@ -61,7 +61,7 @@ function reducer(state, action) {
     }
 }
 
-const BASE_URL = import.meta.env.VITE_Render_Url
+const BASE_URL = process.env.REACT_APP_Backend_Url || 'http://localhost:5000/';
 
 function PlacesProvider({ children }) {
     const [
