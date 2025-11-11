@@ -1,222 +1,133 @@
-
 const express = require("express");
 require("dotenv").config();
+
+const router = express.Router();
+const fetchUser = require("../middleware/fetchUser");
+
 const Place = require("../models/Place");
 const PinLocation = require("../models/PinLocation");
-const router = express.Router();
-const { body, validationResult } = require("express-validator");
-const fetchUser = require("../middleware/fetchUser");
 const Feedback = require("../models/Feedback");
 const UserReqLocation = require("../models/UserReqLocation");
+
 router.use(express.json());
 
-//Route 1: POST Request new places  /api/user/reqplace
-router.post(
-  "/reqplace",
-  [
-    body("name")
-      .isLength({ min: 1 })
-      .withMessage("Name must be at least 1 characters"),
-    body("type")
-      .isLength({ min: 3 })
-      .withMessage("type must be at least 3 characters"),
-    body("latitude")
-      .isLength({ min: 1 })
-      .withMessage("latitude must be at least 1 characters"),
-    body("longitude")
-      .isLength({ min: 1 })
-      .withMessage("longitude must be at least 1 characters"),
-  ],
-  fetchUser,
-  async (req, res) => {
-    const name = req.body.name;
-    const latitude = req.body.latitude;
-    const longitude = req.body.longitude;
-    const type = req.body.type;
-    const errors = validationResult(req);
-    // If validation not successful
-    if (!errors.isEmpty()) {
-      res.status(400).json({ error: errors.array()[0].msg });
-    } else {
-      // Finding Existing place with latitude
-      const existingPlace = await UserReqLocation.findOne({
-        latitude: latitude,
-      });
-      //Existing place not found
-      if (!existingPlace) {
-        try {
-          //Create Place
-          const place = await UserReqLocation.create({
-            name: name,
-            latitude: latitude,
-            longitude: longitude,
-            type: type,
-          });
-          res.json({
-            msg: "Place Requested Added Successfully!",
-          });
-        } catch (error) {
-          console.log(error);
-          res.json({
-            error: "Error while Requesting Place",
-          });
+
+// POST /api/user/reqplace
+router.post("/reqplace", fetchUser, async (req, res) => {
+    try {
+        const { name, type, latitude, longitude } = req.body;
+
+        if (!name || !type || !latitude || !longitude) {
+            return res.status(400).json({ error: "All fields are required" });
         }
-      }
-      // Existing Place found
-      else {
-        res.json({
-          error: "Requested Place already Exist with this latitude",
-        });
-      }
-    }
-  }
-);
 
-//Route 2: POST post feedback  /api/user/feedback
-router.post(
-  "/feedback",
-  [
-    body("message")
-      .isLength({ min: 3 })
-      .withMessage("message must be at least 3 characters"),
-  ],
-  fetchUser,
-  async (req, res) => {
-    const message = req.body.message;
-    const user = req.user;
-    const imageUrl = req.body.imageUrl;
-    console.log(user);
-    const errors = validationResult(req);
-    // If validation not successful
-    if (!errors.isEmpty()) {
-      res.status(400).json({ error: errors.array()[0].msg });
-    } else {
-      try {
-        //Create feedback
-        const feedback = await Feedback.create({
-          user: user.id,
-          message: message,
-          imageUrl: imageUrl,
-        });
-        res.json({
-          msg: "Feedback Successfully!",
-        });
-      } catch (error) {
-        console.log(error);
-        res.json({
-          error: "Error while Requesting feedback",
-        });
-      }
-    }
-  }
-);
+        // Check if place already requested
+        const existingPlace = await UserReqLocation.findOne({ latitude });
+        if (existingPlace) {
+            return res.status(400).json({ error: "Place already requested at this latitude" });
+        }
 
-//Route 3: GET /api/user/places
-router.get("/places", fetchUser, async (req, res) => {
-  try {
-    const places = await Place.find();
-    res.json({ msg: places });
-  } catch (error) {
-    res.json({ error: error });
-  }
+        await UserReqLocation.create({ name, type, latitude, longitude });
+        res.json({ msg: "Place requested successfully!" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Error while requesting place" });
+    }
 });
 
-//Route 4: POST add pin places /api/user/addpinlocation
-router.post(
-  "/addpinlocation",
-  [
-    body("name")
-      .isLength({ min: 1 })
-      .withMessage("Name must be at least 1 characters"),
-    body("type")
-      .isLength({ min: 3 })
-      .withMessage("type must be at least 3 characters"),
-    body("latitude")
-      .isLength({ min: 1 })
-      .withMessage("latitude must be at least 1 characters"),
-    body("longitude")
-      .isLength({ min: 1 })
-      .withMessage("longitude must be at least 1 characters"),
-    body("message")
-      .isLength({ min: 3 })
-      .withMessage("message must be at least 3 characters"),
-  ],
-  fetchUser,
-  async (req, res) => {
-    const name = req.body.name;
-    const latitude = req.body.latitude;
-    const longitude = req.body.longitude;
-    const type = req.body.type;
-    const errors = validationResult(req);
-    const user = req.user;
-    const message = req.body.message;
-    // If validation not successful
-    if (!errors.isEmpty()) {
-      res.status(400).json({ error: errors.array()[0].msg });
-    } else {
-      // Finding Existing place with latitude
-      const existingPlace = await PinLocation.findOne({
-        latitude: latitude,
-      });
-      //Existing place not found
-      if (!existingPlace) {
-        try {
-          //Create Place
-          const place = await PinLocation.create({
+// POST /api/user/feedback
+router.post("/feedback", fetchUser, async (req, res) => {
+    try {
+        const { message, imageUrl } = req.body;
+        const user = req.user;
+
+        if (!message) {
+            return res.status(400).json({ error: "Message is required" });
+        }
+
+        await Feedback.create({
             user: user.id,
-            name: name,
-            latitude: latitude,
-            longitude: longitude,
-            type: type,
-            message: message,
-          });
-          res.json({
-            msg: "Place pined  Successfully!",
-          });
-        } catch (error) {
-          console.log(error);
-          res.json({
-            error: "Error while pinning Place",
-          });
-        }
-      }
-      // Existing Place found
-      else {
-        res.json({
-          error: "Requested Place already pined with this latitude",
+            message,
+            imageUrl,
         });
-      }
-    }
-  }
-);
 
-//Route 5: GET /api/user/pinlocations
-router.get("/pinlocations", fetchUser, async (req, res) => {
-  try {
-    const places = await PinLocation.find({
-      user: req.user.id,
-    });
-    res.json({ msg: places });
-  } catch (error) {
-    res.json({ error: error });
-  }
+        res.json({ msg: "Feedback submitted successfully!" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Error while submitting feedback" });
+    }
 });
 
-//Route 6: DELETE /api/user/deletepinlocation
-router.delete("/deletepinlocation",fetchUser,async (req,res)=>{
-  const latitude = req.body.latitude;
-  const longitude = req.body.longitude;
-  try {
-    const delPinPlace = await PinLocation.findOneAndDelete({
-      user: req.user.id,
-      latitude: latitude,
-      longitude: longitude
-    })
-    res.status(200).json({msg:"Pin deleted Successfully!"})
-  } catch (error) {
-    res.status(500).json({error:"Internal Server error"})
-  }
-})
 
+// GET /api/user/places
+router.get("/places", fetchUser, async (req, res) => {
+    try {
+        const places = await Place.find();
+        res.json({ msg: places });
+    } catch (error) {
+        res.status(500).json({ error: "Error fetching places" });
+    }
+});
+
+
+// POST /api/user/addpinlocation
+router.post("/addpinlocation", fetchUser, async (req, res) => {
+    try {
+        const { name, type, latitude, longitude, message } = req.body;
+        const user = req.user;
+
+        if (!name || !type || !latitude || !longitude || !message) {
+            return res.status(400).json({ error: "All fields are required" });
+        }
+
+        const existingPin = await PinLocation.findOne({ latitude });
+        if (existingPin) {
+            return res.status(400).json({ error: "Pin already exists at this latitude" });
+        }
+
+        await PinLocation.create({
+            user: user.id,
+            name,
+            type,
+            latitude,
+            longitude,
+            message,
+        });
+
+        res.json({ msg: "Place pinned successfully!" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Error while pinning place" });
+    }
+});
+
+
+// GET /api/user/pinlocations
+router.get("/pinlocations", fetchUser, async (req, res) => {
+    try {
+        const pins = await PinLocation.find({ user: req.user.id });
+        res.json({ msg: pins });
+    } catch (error) {
+        res.status(500).json({ error: "Error fetching pinned locations" });
+    }
+});
+
+
+// DELETE /api/user/deletepinlocation
+router.delete("/deletepinlocation", fetchUser, async (req, res) => {
+    try {
+        const { latitude, longitude } = req.body;
+
+        await PinLocation.findOneAndDelete({
+            user: req.user.id,
+            latitude,
+            longitude,
+        });
+
+        res.json({ msg: "Pin deleted successfully!" });
+    } catch (error) {
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
 
 module.exports = router;
